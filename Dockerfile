@@ -37,5 +37,5 @@ RUN ./steamcmd.sh \
 VOLUME ["/home/dst/.klei/DoNotStarveTogether", "/home/dst/server_dst/mods"]
 
 COPY ["start-container-server.sh", "/home/dst/"]
-RUN ["chmod", "+X", "/home/dst/start-container-server.sh"]
+# RUN ["chmod", "+X", "/home/dst/start-container-server.sh"]
 ENTRYPOINT ["/home/dst/start-container-server.sh"]
