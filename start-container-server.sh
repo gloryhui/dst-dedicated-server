@@ -6,7 +6,7 @@
 
 # Copy dedicated_server_mods_setup.lua
 # ds_mods_setup="$HOME/.klei/DoNotStarveTogether/DSTWhalesCluster/mods/dedicated_server_mods_setup.lua"
-ds_mods_setup="$HOME/.klei/server_dst/mods/dedicated_server_mods_setup.lua"
+ds_mods_setup="$HOME/server_dst/mods/dedicated_server_mods_setup.lua"
 if [ ! -f "$ds_mods_setup" ]
 then
   cp $ds_mods_setup "$HOME/server_dst/mods/"
