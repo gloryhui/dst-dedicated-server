@@ -1,25 +1,33 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Check for game updates before each start. If the game client updates and your server is out of date, you won't be
-# able to see it on the server list. If that happens just restart the containers and you should get the latest version
-/home/dst/steamcmd.sh +@ShutdownOnFailedCommand 1 +@NoPromptForPassword 1 +login anonymous +force_install_dir /home/dst/server_dst +app_update 343050 validate +quit
+set -Eeuo pipefail
 
-# Copy dedicated_server_mods_setup.lua
-# ds_mods_setup="$HOME/.klei/DoNotStarveTogether/DSTWhalesCluster/mods/dedicated_server_mods_setup.lua"
-# ds_mods_setup="$HOME/server_dst/mods/dedicated_server_mods_setup.lua"
-# if [ ! -f "$ds_mods_setup" ]
-# then
-#   cp $ds_mods_setup "$HOME/server_dst/mods/"
-# fi
+: "${SHARD_NAME:?SHARD_NAME must be set to Master or Caves}"
 
-# Copy modoverrides.lua
-# modoverrides="$HOME/.klei/DoNotStarveTogether/DSTWhalesCluster/mods/modoverrides.lua"
-# modoverrides="$HOME/server_dst/mods/modoverrides.lua"
-# if [ ! -f "$modoverrides" ]
-# then
-#   cp $modoverrides "$HOME/.klei/DoNotStarveTogether/DSTWhalesCluster/Master/"
-#   cp $modoverrides "$HOME/.klei/DoNotStarveTogether/DSTWhalesCluster/Caves/"
-# fi
+cluster_name="${CLUSTER_NAME:-DSTWhalesCluster}"
+install_dir="${DST_INSTALL_DIR:-$HOME/server_dst}"
+cluster_dir="$HOME/.klei/DoNotStarveTogether/$cluster_name"
 
-cd $HOME/server_dst/bin
-./dontstarve_dedicated_server_nullrenderer -cluster DSTWhalesCluster -shard "$SHARD_NAME"
+if [[ "${UPDATE_SERVER:-true}" == "true" ]]; then
+    # Update at startup so a newly released server build cannot remain stale.
+    "$HOME/steamcmd.sh" \
+        +@ShutdownOnFailedCommand 1 \
+        +@NoPromptForPassword 1 \
+        +force_install_dir "$install_dir" \
+        +login anonymous \
+        +app_update 343050 validate \
+        +quit
+fi
+
+server_binary="$install_dir/bin64/dontstarve_dedicated_server_nullrenderer_x64"
+if [[ ! -x "$server_binary" ]]; then
+    server_binary="$install_dir/bin/dontstarve_dedicated_server_nullrenderer"
+fi
+if [[ ! -x "$server_binary" ]]; then
+    printf 'DST server binary not found in %s/bin\n' "$install_dir" >&2
+    exit 1
+fi
+
+mkdir -p "$cluster_dir"
+cd "$(dirname "$server_binary")"
+exec "$server_binary" -cluster "$cluster_name" -shard "$SHARD_NAME"

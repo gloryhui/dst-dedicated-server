@@ -14,9 +14,9 @@ To updated the game client, **simply stop and start** the server again. On every
 
 From your installation folder, run `docker-compose` in [detached mode](https://docs.docker.com/compose/reference/up/) to start the server
 
-    docker-compose up -d
+    docker compose up -d --build
 
-> :point_up: You can follow **logs** when running in detached mode: `docker-compose logs -f`
+> :point_up: You can follow **logs** when running in detached mode: `docker compose logs -f`
 
 ## Executing console commands
 
@@ -47,6 +47,6 @@ The Master shard will manage to save the game and send a shutdown signal to the 
 
 If you simply want to shutdown the containers without saving the game:
 
-    docker-compose down
+    docker compose down
 
 > :stop_sign: Caution! Stopping the containers **DOES NOT SAVE THE GAME**, it simply gracefully shutdown the server processes and kills the containers.

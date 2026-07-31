@@ -20,7 +20,7 @@
 
 >:bulb: Linux 是最推荐使用Docker的高性能操作系统.
 
-改项目主要使用 **Debian 9** 来进行部署测试.侧重Linux.但是其他操作系统应该也没问题.
+镜像使用固定的 Debian Bookworm 基础镜像，并通过 SteamCMD 安装当前版本的饥荒联机版专用服务器。Linux 服务端使用 `amd64` 容器；在 ARM 主机上可由 Docker Desktop 使用模拟运行。
 
 ### 安装指南
 
@@ -78,7 +78,8 @@
 
 克隆(clone)这个仓库下来到你的用户目录:
 
-    cd ~ && git clone https://github.com/mathielo/dst-dedicated-server.git
+    git clone https://github.com/gloryhui/dst-dedicated-server.git
+    cd dst-dedicated-server
 
 > :cop: **不要**使用`sudo git clone`来操作，不然可能会遇到权限问题.:angel:
 
@@ -97,6 +98,8 @@
 :closed_lock_with_key: 生成令牌的账户会获得管理员权限,管理员可以在游戏里重置世界，使用命令等.
 
 :rainbow: OK! 到这里你就可以启动你的服务器进行游玩啦!
+
+Compose 会在本地构建镜像，并在每个分片启动时通过 SteamCMD 检查并更新服务端。若需要跳过启动时检查，可在服务的环境变量中设置 `UPDATE_SERVER=false`。镜像优先使用当前的 64 位服务端程序，同时兼容旧的 32 位程序。
 
 
 # 管理服务器

@@ -20,7 +20,7 @@ Any OS that [supports Docker](https://docs.docker.com/engine/installation/#suppo
 
 >:bulb: Linux is the _recommended_ OS to host the containers for better performance gains
 
-This project was deployed and tested using **Debian 9**. Instructions will be focused on Linux - but it should be easy to adapt to any other OS.
+The image uses a pinned Debian Bookworm base and installs the current DST dedicated server through SteamCMD. The Linux server is currently run as an `amd64` container; Docker Desktop can use emulation on ARM hosts.
 
 ### Installation Overview
 
@@ -80,7 +80,8 @@ You only need the [Docker desktop standalone](https://docs.docker.com/engine/ins
 
 Clone this repository in your home folder:
 
-    cd ~ && git clone https://github.com/mathielo/dst-dedicated-server.git
+    git clone https://github.com/gloryhui/dst-dedicated-server.git
+    cd dst-dedicated-server
 
 > :cop: Do **not** `sudo git clone` or your might run into permission issues :angel:
 
@@ -99,6 +100,8 @@ You can easily do that replacing `InsertYourTokenHere` in the following command 
 :closed_lock_with_key: The account that generates the token automatically gains admin access in-game, meaning you can rollback, regenerate the world or use console commands while playing.
 
 :rainbow: Done! You are ready to start your server and play!
+
+The Compose file builds the image locally and updates the server from SteamCMD when each shard starts. Set `UPDATE_SERVER=false` in a service environment when you need to start without checking Steam. The image prefers the current 64-bit DST server binary and falls back to the legacy 32-bit binary when necessary.
 
 # Manage the Server
 
