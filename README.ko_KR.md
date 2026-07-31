@@ -16,7 +16,7 @@ SteamCMD로 Steam App `343050`을 설치하고 현재 64비트 서버 바이너�
 Docker Engine 또는 Docker Desktop, Compose v2, Git, amd64 호스트가 필요합니다. ARM 호스트에서는 amd64 에뮬레이션을 사용할 수 있습니다.
 
 ```bash
-git clone https://github.com/gloryhui/dst-dedicated-server.git
+git clone https://github.com/mathielo/dst-dedicated-server.git
 cd dst-dedicated-server
 ```
 

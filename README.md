@@ -20,7 +20,7 @@ The image installs Steam App `343050` with SteamCMD, prefers the current 64-bit 
 Requirements: Docker Engine or Docker Desktop with Compose v2, Git, and an `amd64` host. Docker Desktop can emulate `amd64` on ARM, but native amd64 is recommended for a dedicated server.
 
 ```bash
-git clone https://github.com/gloryhui/dst-dedicated-server.git
+git clone https://github.com/mathielo/dst-dedicated-server.git
 cd dst-dedicated-server
 ```
 

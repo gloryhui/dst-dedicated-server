@@ -20,7 +20,7 @@
 要求：Docker Engine 或 Docker Desktop、Compose v2、Git，以及 `amd64` 主机。ARM 主机可以通过 Docker Desktop 模拟 `amd64`，但原生 amd64 更适合长期运行服务器。
 
 ```bash
-git clone https://github.com/gloryhui/dst-dedicated-server.git
+git clone https://github.com/mathielo/dst-dedicated-server.git
 cd dst-dedicated-server
 ```
 
