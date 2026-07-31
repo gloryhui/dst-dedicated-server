@@ -2,6 +2,8 @@
 
 本路径直接在 Linux 主机上运行 DST 服务端，不使用 Docker。Docker 仍然是推荐方案，因为镜像固定了用户空间和运行依赖，并且完整运行环境已经验证过。下面的原生流程只是参考，未在列出的每个发行版、版本和内核上逐一实机验证。
 
+SteamCMD 的命令顺序和下载地址参考 [Valve SteamCMD 文档](https://developer.valvesoftware.com/wiki/SteamCMD)，Token 流程参考 [Klei 官方 Server Token 页面](https://accounts.klei.com/account/game/servers?game=DontStarveTogether)。下面的依赖包名是各发行版的参考命令，不保证每个版本完全相同。
+
 ## 适用环境
 
 建议使用 64 位 `amd64` Linux。当前 DST 的 64 位服务端位于 `bin64/`，但 SteamCMD 本身仍使用 32 位启动程序，因此必须安装 32 位 glibc 和运行库。ARM、Alpine/musl 主机不建议采用此流程。

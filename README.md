@@ -156,6 +156,13 @@ DST_IMAGE=registry.example.com/dst/dedicated-server:VERSION docker compose up -d
 - Saves fail: inspect bind-mount ownership and look for `Failed to save file` in the logs.
 - ARM host fails to start: use an amd64 host or enable Docker amd64 emulation.
 
+## Official References
+
+- [Valve SteamCMD documentation](https://developer.valvesoftware.com/wiki/SteamCMD)
+- [Klei Server Token page](https://accounts.klei.com/account/game/servers?game=DontStarveTogether)
+- [Klei dedicated server settings guide](https://forums.kleientertainment.com/topic/64552-dedicated-server-settings-guide/)
+- [Klei dedicated server command-line guide](https://forums.kleientertainment.com/topic/64743-dedicated-server-command-line-options-guide/)
+
 ## License
 
 MIT. See [LICENSE.md](LICENSE.md).

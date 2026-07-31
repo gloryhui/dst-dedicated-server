@@ -120,11 +120,11 @@ docker compose up -d --build
 
 ## Mod、管理员与存档
 
-- [Mod 配置](DSTClusterConfig/mods/README.md)
-- [管理员、封禁和白名单](docs/AdminBanWhitelist.md)
-- [服务器管理](docs/ManagingTheServer.md)
-- [性能优化](docs/ServerPerformance.md)
-- [Server Token](docs/ClusterToken.md)
+- [Mod 配置](DSTClusterConfig/mods/README.zh_CN.md)
+- [管理员、封禁和白名单](docs/zh-CN/AdminBanWhitelist.md)
+- [服务器管理](docs/zh-CN/ManagingTheServer.md)
+- [性能优化](docs/zh-CN/ServerPerformance.md)
+- [Server Token](docs/zh-CN/ClusterToken.md)
 - [原生 Linux 部署](docs/NativeLinux.zh_CN.md)
 
 绑定挂载目录必须允许容器用户写入。Linux 上优先检查所有者和权限，不要用 `chmod 777` 替代正确的目录归属。
@@ -155,6 +155,13 @@ DST_IMAGE=registry.example.com/dst/dedicated-server:VERSION docker compose up -d
 - 地上和洞穴无法连接：检查 Docker 网络、`master_ip = dst_master`、`cluster_key` 和集群名称是否一致。
 - 存档失败：检查绑定目录所有权，并在日志中搜索 `Failed to save file`。
 - ARM 主机启动失败：使用 amd64 主机或启用 Docker amd64 模拟。
+
+## 官方参考
+
+- [Valve SteamCMD 文档](https://developer.valvesoftware.com/wiki/SteamCMD)
+- [Klei Server Token 页面](https://accounts.klei.com/account/game/servers?game=DontStarveTogether)
+- [Klei 专用服务器设置指南](https://forums.kleientertainment.com/topic/64552-dedicated-server-settings-guide/)
+- [Klei 专用服务器命令行指南](https://forums.kleientertainment.com/topic/64743-dedicated-server-command-line-options-guide/)
 
 ## 许可证
 

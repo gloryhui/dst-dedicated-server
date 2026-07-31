@@ -2,6 +2,8 @@
 
 This path runs the DST server directly on Linux without Docker. Docker remains the recommended path because the image pins the base userspace and has been tested as a complete runtime. The native path below is a reference procedure and has not been verified on every listed distribution or kernel.
 
+The SteamCMD command order and download source follow [Valve's SteamCMD documentation](https://developer.valvesoftware.com/wiki/SteamCMD). The Token workflow follows the [official Klei Server Token page](https://accounts.klei.com/account/game/servers?game=DontStarveTogether). Package names below are distribution-specific reference commands, not a guarantee that every release uses identical package names.
+
 ## Supported Target
 
 Use a 64-bit `amd64` Linux host. Current DST includes a 64-bit server under `bin64/`, while SteamCMD still uses a 32-bit bootstrapper. ARM and Alpine/musl hosts are not recommended for this procedure.

@@ -1,26 +1,24 @@
-# DST Dedicated Server - Docs
+# DST Dedicated Server Documentation
 
-## Essentials
+The English documents remain at the original paths for backward compatibility.
 
-These are the minimum required steps to have a server running:
+## Languages
 
-* Prepare the host
-  * [Install Git](/../../#prepare-the-host)
-  * [Install Docker](/../../#install-docker)
-* Setup the server
-  * [Server files](/../../#prepare-the-dedicated-server) (clone this repository)
-  * [Generate `cluster_token.txt`](./ClusterToken.md)
-* [Manage the server](./ManagingTheServer.md) (how to start, save and stop)
-* [Basic settings setup](/../../#the-server) (server name, password, etc.)
+| Topic | English | 简体中文 |
+| --- | --- | --- |
+| Server Token | [English](ClusterToken.md) | [中文](zh-CN/ClusterToken.md) |
+| Server management | [English](ManagingTheServer.md) | [中文](zh-CN/ManagingTheServer.md) |
+| Native Linux | [English](NativeLinux.md) | [中文](zh-CN/NativeLinux.md) |
+| Admins and permissions | [English](AdminBanWhitelist.md) | [中文](zh-CN/AdminBanWhitelist.md) |
+| Performance | [English](ServerPerformance.md) | [中文](zh-CN/ServerPerformance.md) |
+| Mods | [English](../DSTClusterConfig/mods/README.md) | [中文](../DSTClusterConfig/mods/README.zh_CN.md) |
+| Persistent volumes | [English](../volumes/README.md) | [中文](../volumes/README.zh_CN.md) |
 
-## Optionals
+Use [README.md](../README.md) for the main English guide or [README.zh_CN.md](../README.zh_CN.md) for the main Chinese guide.
 
-Enhance your server by customizing it to your liking!
+## Official References
 
-* Customize your server
-  * [Tweak server settings](/../../#the-server) (game mode, max players, Steam Group, description, etc.)
-  * [World Settings](/../../#the-world) (World Size, Seasons, Difficulty, etc)
-  * [Install Mods](../DSTClusterConfig/mods)
-  * [Set Admins, Bans and Whitelisted Players](./AdminBanWhitelist.md)
-* How to optimize your [DST Server Performance](./ServerPerformance.md)
-
+- [Valve SteamCMD documentation](https://developer.valvesoftware.com/wiki/SteamCMD)
+- [Klei Server Token page](https://accounts.klei.com/account/game/servers?game=DontStarveTogether)
+- [Klei dedicated server settings guide](https://forums.kleientertainment.com/topic/64552-dedicated-server-settings-guide/)
+- [Klei dedicated server command-line guide](https://forums.kleientertainment.com/topic/64743-dedicated-server-command-line-options-guide/)
