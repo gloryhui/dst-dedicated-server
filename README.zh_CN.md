@@ -13,7 +13,9 @@
 | 日本語 | [README.ja_JP.md](README.ja_JP.md) |
 | 한국어 | [README.ko_KR.md](README.ko_KR.md) |
 
-## 快速开始
+## 选择部署方式
+
+### Docker（推荐）
 
 要求：Docker Engine 或 Docker Desktop、Compose v2、Git，以及 `amd64` 主机。ARM 主机可以通过 Docker Desktop 模拟 `amd64`，但原生 amd64 更适合长期运行服务器。
 
@@ -43,6 +45,39 @@ docker compose logs -f
 ```bash
 docker compose down
 ```
+
+### 原生 Linux（不使用 Docker）
+
+如果不能或不希望使用 Docker，可以直接在 Linux 主机运行服务端。这是参考流程，未在下列每个发行版、内核和硬件平台上逐一实机验证。Docker 更推荐，因为依赖可复现、升级和排错更简单。
+
+原生主机需要 SteamCMD、Bash、curl、tar、CA 证书，以及 32 位 glibc/GCC/libstdc++/libcurl 兼容库。不同发行版的包名不同：
+
+| 发行版家族 | 主要依赖 |
+| --- | --- |
+| Debian/Ubuntu | `libc6:i386`、`lib32gcc-s1`、`lib32stdc++6`、`libcurl3-gnutls:i386`、`libcurl4:i386` |
+| Fedora/RHEL/Rocky/Alma | `glibc.i686`、`libgcc.i686`、`libstdc++.i686`、`libcurl.i686` |
+| Arch | `multilib` 中的 `lib32-glibc`、`lib32-gcc-libs`、`lib32-curl` |
+
+Debian/Ubuntu 安装依赖：
+
+```bash
+sudo dpkg --add-architecture i386
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y \
+  bash ca-certificates curl tar libc6:i386 lib32gcc-s1 lib32stdc++6 \
+  libcurl3-gnutls libcurl3-gnutls:i386 libcurl4 libcurl4:i386
+```
+
+从当前 [Valve CDN](https://media.steampowered.com/client/installer/steamcmd_linux.tar.gz) 下载 SteamCMD，安装 App `343050`，将 `DSTClusterConfig/` 复制到 `$HOME/.klei/DoNotStarveTogether/DSTCluster`，然后使用 `tmux`、`screen` 或 systemd 分别运行两个分片。仓库提供了可复用脚本：
+
+```bash
+export DST_ROOT="$HOME/dst"
+./scripts/native/update-server.sh
+SHARD_NAME=Master ./scripts/native/start-shard.sh
+SHARD_NAME=Caves ./scripts/native/start-shard.sh
+```
+
+完整的原生流程、systemd 单元、发行版差异、防火墙和限制见 [docs/NativeLinux.zh_CN.md](docs/NativeLinux.zh_CN.md)。ARM、Alpine/musl、旧 CentOS 和未验证的发行版组合建议使用 Docker。
 
 ## 端口与网络
 
@@ -90,6 +125,7 @@ docker compose up -d --build
 - [服务器管理](docs/ManagingTheServer.md)
 - [性能优化](docs/ServerPerformance.md)
 - [Server Token](docs/ClusterToken.md)
+- [原生 Linux 部署](docs/NativeLinux.zh_CN.md)
 
 绑定挂载目录必须允许容器用户写入。Linux 上优先检查所有者和权限，不要用 `chmod 777` 替代正确的目录归属。
 

@@ -13,7 +13,9 @@ The image installs Steam App `343050` with SteamCMD, prefers the current 64-bit 
 | 日本語 | [README.ja_JP.md](README.ja_JP.md) |
 | 한국어 | [README.ko_KR.md](README.ko_KR.md) |
 
-## Quick Start
+## Choose a Deployment
+
+### Docker (recommended)
 
 Requirements: Docker Engine or Docker Desktop with Compose v2, Git, and an `amd64` host. Docker Desktop can emulate `amd64` on ARM, but native amd64 is recommended for a dedicated server.
 
@@ -43,6 +45,39 @@ Stop the server with `c_shutdown()` from the Master console when possible so the
 ```bash
 docker compose down
 ```
+
+### Native Linux (without Docker)
+
+This path is for users who cannot or do not want to use Docker. It is a reference path and has not been verified on every listed distribution, kernel, or hardware platform. Docker is recommended for reproducible dependencies and easier upgrades.
+
+The native host needs SteamCMD, Bash, curl, tar, CA certificates, and 32-bit glibc/GCC/libstdc++/libcurl compatibility libraries. The package names differ by distribution:
+
+| Distribution family | Main packages |
+| --- | --- |
+| Debian/Ubuntu | `libc6:i386`, `lib32gcc-s1`, `lib32stdc++6`, `libcurl3-gnutls:i386`, `libcurl4:i386` |
+| Fedora/RHEL/Rocky/Alma | `glibc.i686`, `libgcc.i686`, `libstdc++.i686`, `libcurl.i686` |
+| Arch | `lib32-glibc`, `lib32-gcc-libs`, `lib32-curl` from `multilib` |
+
+For Debian/Ubuntu:
+
+```bash
+sudo dpkg --add-architecture i386
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y \
+  bash ca-certificates curl tar libc6:i386 lib32gcc-s1 lib32stdc++6 \
+  libcurl3-gnutls libcurl3-gnutls:i386 libcurl4 libcurl4:i386
+```
+
+Download SteamCMD from the current [Valve CDN](https://media.steampowered.com/client/installer/steamcmd_linux.tar.gz), install App `343050`, copy `DSTClusterConfig/` into `$HOME/.klei/DoNotStarveTogether/DSTCluster`, and run one shard per `tmux`, `screen`, or systemd service. The repository provides reusable helpers:
+
+```bash
+export DST_ROOT="$HOME/dst"
+./scripts/native/update-server.sh
+SHARD_NAME=Master ./scripts/native/start-shard.sh
+SHARD_NAME=Caves ./scripts/native/start-shard.sh
+```
+
+The detailed native procedure, systemd units, distro notes, firewall setup and limitations are in [docs/NativeLinux.md](docs/NativeLinux.md). ARM, Alpine/musl, old CentOS and untested distro combinations should use Docker instead.
 
 ## Ports and Networking
 
@@ -90,6 +125,7 @@ The default world files use the current `version=4` format. Changing shard names
 - [Server management](docs/ManagingTheServer.md)
 - [Performance](docs/ServerPerformance.md)
 - [Server Token](docs/ClusterToken.md)
+- [Native Linux deployment](docs/NativeLinux.md)
 
 Bind-mounted directories must be writable by the container user. On Linux, check ownership and permissions before using `chmod 777`; broad permissions are not a substitute for correct ownership.
 

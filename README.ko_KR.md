@@ -78,4 +78,6 @@ docker buildx build --platform linux/amd64 \
 
 자세한 관리 방법은 [docs/ManagingTheServer.md](docs/ManagingTheServer.md)를 참고하세요.
 
+Docker를 사용하지 않는 네이티브 Linux 절차와 배포판별 의존성은 [docs/NativeLinux.md](docs/NativeLinux.md)를 참고하세요. 재현성과 유지보수를 위해 Docker를 권장합니다.
+
 라이선스: MIT.
