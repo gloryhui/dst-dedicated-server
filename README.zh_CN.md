@@ -1,187 +1,125 @@
-# 饥荒-联机版 - 专用服务器
+# 饥荒：联机版专用服务器
 
-[![Automated Docker Builds](https://img.shields.io/docker/automated/mathielo/dst-dedicated-server.svg)](https://cloud.docker.com/repository/docker/mathielo/dst-dedicated-server)
-[![Docker Build State](https://img.shields.io/docker/build/mathielo/dst-dedicated-server.svg)](https://cloud.docker.com/repository/docker/mathielo/dst-dedicated-server)
-[![Docker Image Pulls](https://img.shields.io/docker/pulls/mathielo/dst-dedicated-server.svg)](https://cloud.docker.com/repository/docker/mathielo/dst-dedicated-server)
-[![License: MIT]( https://img.shields.io/github/license/mathielo/dst-dedicated-server.svg)](https://github.com/mathielo/dst-dedicated-server/blob/master/LICENSE.md)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-round)](http://makeapullrequest.com)
+使用 Docker 部署当前版本饥荒：联机版 Linux 专用服务器。
 
-饥荒-联机版 专用服务器搭建指南(Linux, Mac, Windows)Docker版
+镜像通过 SteamCMD 安装 Steam App `343050`，优先运行当前 64 位服务端，同时保留旧 32 位运行时作为回退。支持的容器平台是 `linux/amd64`。
 
-此项目的目的是使用 **最少** 的配置快速搭建出一个饥荒联机版的专用服务器.
+## 多语言
 
-## 其他语言安装指南
+| 语言 | 文档 |
+| --- | --- |
+| English | [README.md](README.md) |
+| 简体中文 | 当前页面 |
+| 日本語 | [README.ja_JP.md](README.ja_JP.md) |
+| 한국어 | [README.ko_KR.md](README.ko_KR.md) |
 
-* [README in English](README.md)
+## 快速开始
 
-## 安装
+要求：Docker Engine 或 Docker Desktop、Compose v2、Git，以及 `amd64` 主机。ARM 主机可以通过 Docker Desktop 模拟 `amd64`，但原生 amd64 更适合长期运行服务器。
 
-任何支持 [Docker](https://docs.docker.com/engine/installation/#supported-platforms) 的系统都可以运行这个专用服务器.
-
->:bulb: Linux 是最推荐使用Docker的高性能操作系统.
-
-镜像使用固定的 Debian Bookworm 基础镜像，并通过 SteamCMD 安装当前版本的饥荒联机版专用服务器。Linux 服务端使用 `amd64` 容器；在 ARM 主机上可由 Docker Desktop 使用模拟运行。
-
-### 安装指南
-
-#### 必须条件
-这些是满足服务器运行的最低条件
-
-* 本地/服务器 软件
-  * [安装 Git](#prepare-the-host)
-  * [安装 Docker](#install-docker)
-* 设置服务器
-  * [服务器文件](#prepare-the-dedicated-server) (克隆这个项目)
-  * [生成 `cluster_token.txt` 令牌文件](#generate-cluster_tokentxt)
-* [管理服务器](docs/ManagingTheServer.md) (知道如何 启动,保存,停止)
-* [基础服务器设定](#the-server) (服务器名,密码,其他配置.)
-
-#### 选配设定
-
-根据自己的喜好来配置自己的服务器
-
-* 自定义自己的服务器
-  * [调整服务器配置](#the-server) (游戏MOD,玩家人数,Steam组,简介,其他配置.)
-  * [世界设定](#the-world) (世界大小,四季,难度,其他配置.)
-  * [安装 Mods](DSTClusterConfig/mods)
-  * [设置管理员,Ban人,白名单用户](docs/AdminBanWhitelist.md)
-* 如何优化你的 [DST服务器性能Tips](docs/ServerPerformance.md)
-
----
-
-# 准备主机
-
-请阅读 [DST服务器性能Tips](./docs/ServerPerformance.md)来充分利用您的服务器资源.如果你不了解这些，可以看[如何选择服务器](./ServerPerformance.md#picking-a-host) 来帮你选择一台配置合适的主机
-<!-- Read about [server performance](./docs/ServerPerformance.md) for useful tips to make the best use of your resources! That might also help you to [pick a host](./ServerPerformance.md#picking-a-host) machine if you're unsure about it. -->
-
-## 安装 Git
-
-    sudo apt-get install git
-
-## 安装 Docker
-
-### Linux
-按照Docker官网的 [Get Docker CE for Debian](https://docs.docker.com/install/linux/docker-ce/debian)文档进行安装,第一次看可能觉得复杂，但是文档描述的很详细和透彻
->:cop: 确定您的用户拥有sudo权限，如果已root用户执行可能未在之后遇到权限问题.[_sudoer user_](https://www.digitalocean.com/community/tutorials/how-to-create-a-sudo-user-on-ubuntu-quickstart)
-
-* [Docker Engine CE](https://docs.docker.com/engine/installation/linux/docker-ce/debian/#set-up-the-repository)
-* [Docker Compose](https://docs.docker.com/compose/install/#install-compose)
-* **重点:** 阅读 :point_right: [post-installation steps for Linux](https://docs.docker.com/engine/installation/linux/linux-postinstall/) :point_left: 来确保你使用的用户具有免sudo使用docker的权限。
-  * 设置你的用户可以免`sudo`使用`docker`
-  * 配置你的`Docker`为开机启动
-
-### Mac OS / Windows
-
-你只需要下载适合您系统的[Docker desktop standalone](https://docs.docker.com/engine/installation/#desktop)安装文件就可以了，几乎无需配置.
-
-# 准备专用服务器
-
-克隆(clone)这个仓库下来到你的用户目录:
-
-    git clone https://github.com/gloryhui/dst-dedicated-server.git
-    cd dst-dedicated-server
-
-> :cop: **不要**使用`sudo git clone`来操作，不然可能会遇到权限问题.:angel:
-
-从[Managing the Server](./docs/ManagingTheServer.md)查看更多相关信息.
-
-## 生成 `cluster_token.txt` 令牌文件
-
-:warning: 饥荒服务器的令牌文件存储在`DSTClusterConfig/cluster_token.txt`文件中,如果没有这个文件，**饥荒服务器无法启动**.
-
-查看[如何生成Token令牌](./docs/ClusterToken.md)这个文档,并生成自己的Token令牌,替换这个`DSTClusterConfig/cluster_token.txt`文件.文件中不能存在空格或者其他字符
-
-你可以使用如下命令快速替换你的token令牌
-
-    echo 'token字符串' > ~/dst-dedicated-server/DSTClusterConfig/cluster_token.txt
-
-:closed_lock_with_key: 生成令牌的账户会获得管理员权限,管理员可以在游戏里重置世界，使用命令等.
-
-:rainbow: OK! 到这里你就可以启动你的服务器进行游玩啦!
-
-Compose 会在本地构建镜像，并在每个分片启动时通过 SteamCMD 检查并更新服务端。若需要跳过启动时检查，可在服务的环境变量中设置 `UPDATE_SERVER=false`。镜像优先使用当前的 64 位服务端程序，同时兼容旧的 32 位程序。
-
-
-# 管理服务器
-
-你现在应该已有所需的一切！ 请参阅有关[管理服务器](./docs/ManagingTheServer.md)的完整文档，以了解如何**启动**，**保存**游戏和**停止**服务器。
-
-继续阅读[自定义服务器](#customizing-the-server--world)和[安装MOD](#managing-mods)并根据自己的喜好配置.
-
----
-
-# 自定义服务器和世界设定
-
-如下目录结构和文件列表是配置您喜欢的服务器设定和世界设定的配置文件
-
-> :rotating_light: 除非您知道您在做什么，请勿修改除了下列文件之外的文件.
-
-```
-DSTClusterConfig/
-  Caves/
-    leveldataoverride.lua
-  Master/
-    leveldataoverride.lua
-  mods/
-    dedicated_server_mods_setup.lua
-    modoverrides.lua
-  adminlist.txt
-  blocklist.txt
-  cluster.ini
-  whitelist.txt
+```bash
+git clone https://github.com/gloryhui/dst-dedicated-server.git
+cd dst-dedicated-server
 ```
 
-## 服务器配置
+在 [Klei 账号服务器页面](https://accounts.klei.com/account/game/servers?game=DontStarveTogether)生成 Server Token，只将 Token 值写入：
 
-* [DSTClusterConfig/cluster.ini](./DSTClusterConfig/cluster.ini)
-
-此文件包含服务器配置,比如`max_players`(最大玩家数),`pause_when_empty`(无玩家时暂停服务器),`cluster_intention`(游戏模式,合作，竞争，生存等),以及[更多配置 :link:](https://forums.kleientertainment.com/topic/64552-dedicated-server-settings-guide/).
-
-
-> :bulb: 当你**第一次设置** 时，请至少修改[`cluster_name`](./DSTClusterConfig/cluster.ini#L27)和[`cluster_password`](./DSTClusterConfig/cluster.ini#L29)两个参数，来确保能第一时间从游戏列表中找到.
-
-
-> :cop: 请小心修改. 有些部分的`[ CHANGE THIS ]`表示需要你修改此处的值,还有一些属性不应该修改,除非你知道你在做什么,不然可能会破坏`Master`(地上)和`Caves`(洞穴)之间的通讯
-
-默认情况下,游戏会在每个游戏日自动保存一次(`autosaver_enabled = true`).
-
-## 世界设定
-
-需要为`Master`(地上)/`Caves`(洞穴)配置对应的世界配置文件:
-
-* [DSTClusterConfig/Master/leveldataoverride.lua](./DSTClusterConfig/Master/leveldataoverride.lua)
-* [DSTClusterConfig/Caves/leveldataoverride.lua](./DSTClusterConfig/Caves/leveldataoverride.lua)
-
-你可以根据自己的喜好自定义配置,并请为洞穴指定如下两个配置:
-
-```
-    id="DST_CAVE"
-    location="Cave"
+```text
+DSTClusterConfig/cluster_token.txt
 ```
 
-## Mods
+启动地上和洞穴分片：
 
-查看[详细说明](./DSTClusterConfig/mods)来配置MOD(安装,配置,启用等):alien:
+```bash
+docker compose up -d --build
+docker compose ps
+docker compose logs -f
+```
 
-## 管理员,BAN人,白名单
+首次构建会下载完整专用服务器，可能需要几分钟。每个分片启动时都会通过 SteamCMD 检查更新，临时更新失败会自动重试 3 次。需要跳过更新时，可给服务设置 `UPDATE_SERVER=false`。
 
-如果你知道你在找啥,`(admin|block|white)list.txt`这些文件可以在[`DSTClusterConfig/`](./DSTClusterConfig)中找到.
+尽量在 Master 控制台执行 `c_shutdown()` 后再停止，以确保世界保存。强制停止容器：
 
-您可以在[设置管理员,禁止,白名单](./docs/AdminBanWhitelist.md)文档中找到详细信息和完整指南。
+```bash
+docker compose down
+```
 
----
+## 端口与网络
 
-# 特约
+默认 Compose 发布以下 UDP 端口：
 
-我们随时欢迎您的贡献和反馈！随意打开一个[问题](/../../issues)或[pull request](/../../pulls)来提交改进
+| 分片 | 主机端口 |
+| --- | --- |
+| 地上 Master | `10999/udp` |
+| 洞穴 Caves | `10998/udp` |
 
-# 参考文献
+请在主机防火墙、云安全组、路由器或穿透服务中放行两个 UDP 端口，不要将游戏端口配置为 TCP。
 
-* [How to setup dedicated server with cave on Linux](http://steamcommunity.com/sharedfiles/filedetails/?id=590565473)
-* [Dedicated Server Settings Guide](https://forums.kleientertainment.com/topic/64552-dedicated-server-settings-guide/)
-* [Dedicated Server Command Line Options Guide](https://forums.kleientertainment.com/topic/64743-dedicated-server-command-line-options-guide/)
+使用 NPS 或其他中转时，需要建立两个 UDP 映射。NPS 客户端控制连接可以使用 TCP，但 DST 游戏流量必须保持 UDP。DNS 只能提供稳定域名，不能承担中转；玩家无法直连时，需要支持 UDP 的四层中转。
 
-### 其他链接
+Klei 和 Steam 服务参与服务器注册与认证。中转只能转发游戏端口，不能替代 Klei 认证，也不能保证所有地区都能访问 Steam。应从目标地区实际测试游戏连接。
 
-* [Thread in Klei forums](https://forums.kleientertainment.com/topic/84574-dedicated-server-setup-guide-on-any-platform-windowsmaclinux-with-docker/)
-* [Steam Guide](http://steamcommunity.com/sharedfiles/filedetails/?id=1206742951)
+## 最小化本地部署
+
+`deployment/` 已被 Git 忽略，其中包含一个简体中文、地上+洞穴、默认世界资源、无 Mod 的最小化部署。它是本机状态，不会进入仓库：
+
+```bash
+cd deployment
+docker compose up -d --build
+```
+
+新克隆仓库时使用根目录 Compose；如需使用最小化部署，请另外复制被忽略的 `deployment/` 目录。
+
+## 配置文件
+
+| 文件 | 用途 |
+| --- | --- |
+| `DSTClusterConfig/cluster.ini` | 名称、密码、人数、语言和网络设置 |
+| `DSTClusterConfig/cluster_token.txt` | 私有 Klei Token，禁止提交 |
+| `DSTClusterConfig/Master/server.ini` | 地上端口和分片身份 |
+| `DSTClusterConfig/Caves/server.ini` | 洞穴端口和分片身份 |
+| `DSTClusterConfig/*/leveldataoverride.lua` | 世界生成设置 |
+| `DSTClusterConfig/mods/` | Mod 安装与覆盖配置 |
+
+默认世界配置使用当前 `version=4` 格式。不要随意修改分片名称、`master_ip`、`cluster_key` 或端口，否则可能破坏地上与洞穴之间的通信。
+
+## Mod、管理员与存档
+
+- [Mod 配置](DSTClusterConfig/mods/README.md)
+- [管理员、封禁和白名单](docs/AdminBanWhitelist.md)
+- [服务器管理](docs/ManagingTheServer.md)
+- [性能优化](docs/ServerPerformance.md)
+- [Server Token](docs/ClusterToken.md)
+
+绑定挂载目录必须允许容器用户写入。Linux 上优先检查所有者和权限，不要用 `chmod 777` 替代正确的目录归属。
+
+## 镜像分发
+
+项目默认本地构建。面向多国玩家时，可以将同一个不可变版本标签推送到玩家附近的 GHCR、Docker Hub、阿里云 ACR 或私有 Harbor：
+
+```bash
+docker buildx build --platform linux/amd64 \
+  -t ghcr.io/OWNER/dst-dedicated-server:VERSION \
+  --push .
+```
+
+然后将 Compose 中的 `image:` 改为对应地区的镜像地址。不要把 Klei Token、存档或 `deployment/` 放进镜像；建议使用不可变版本标签，`latest` 只作为便利别名。镜像镜像只能降低下载镜像的时间，不能改变 DST 匹配、Klei 认证或玩家到服务器的 UDP 延迟。
+
+也可以不修改 YAML，直接通过环境变量指定镜像：
+
+```bash
+DST_IMAGE=registry.example.com/dst/dedicated-server:VERSION docker compose pull
+DST_IMAGE=registry.example.com/dst/dedicated-server:VERSION docker compose up -d
+```
+
+## 常见问题
+
+- 服务器版本过旧：重启服务并查看 SteamCMD 日志，启动更新器会自动重试。
+- 找不到服务器：检查 Token、UDP `10998`/`10999`、云安全组、NPS UDP 映射及访问 Klei/Steam 的出站网络。
+- 地上和洞穴无法连接：检查 Docker 网络、`master_ip = dst_master`、`cluster_key` 和集群名称是否一致。
+- 存档失败：检查绑定目录所有权，并在日志中搜索 `Failed to save file`。
+- ARM 主机启动失败：使用 amd64 主机或启用 Docker amd64 模拟。
+
+## 许可证
+
+MIT，见 [LICENSE.md](LICENSE.md)。

@@ -2,7 +2,7 @@ services:
   dst_master:
     platform: linux/amd64
     build: .
-    image: gloryhuis/dst-dedicated-server:latest
+    image: ${DST_IMAGE:-gloryhuis/dst-dedicated-server:latest}
     container_name: dst_master
     restart: unless-stopped
     ports:
@@ -21,7 +21,7 @@ services:
   dst_caves:
     platform: linux/amd64
     build: .
-    image: gloryhuis/dst-dedicated-server:latest
+    image: ${DST_IMAGE:-gloryhuis/dst-dedicated-server:latest}
     container_name: dst_caves
     restart: unless-stopped
     depends_on:
