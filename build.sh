@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t gloryhuis/dst-dedicated-server:latest . 
+docker build -t gloryhuis/dst-dedicated-server:latest .
