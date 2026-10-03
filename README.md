@@ -135,6 +135,13 @@ Bind-mounted directories must be writable by the container user. On Linux, check
 
 The repository builds locally by default. For regional distribution, publish the same immutable tag to registries close to your players, for example GHCR, Docker Hub, Alibaba Cloud ACR, or a private Harbor registry:
 
+`./build.sh` builds `linux/amd64`, checks for base image updates, and defaults to `gloryhuis/dst-dedicated-server:latest`. Set `DST_IMAGE` to select a full image tag; building does not automatically push it:
+
+```bash
+DST_IMAGE=gloryhuis/dst-dedicated-server:VERSION ./build.sh
+docker push gloryhuis/dst-dedicated-server:VERSION
+```
+
 ```bash
 docker buildx build --platform linux/amd64 \
   -t ghcr.io/OWNER/dst-dedicated-server:VERSION \

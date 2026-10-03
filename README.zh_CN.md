@@ -135,6 +135,13 @@ docker compose up -d --build
 
 项目默认本地构建。面向多国玩家时，可以将同一个不可变版本标签推送到玩家附近的 GHCR、Docker Hub、阿里云 ACR 或私有 Harbor：
 
+`./build.sh` 固定构建 `linux/amd64`，检查基础镜像更新，默认标签为 `gloryhuis/dst-dedicated-server:latest`。可通过 `DST_IMAGE` 指定完整镜像标签；构建不会自动推送：
+
+```bash
+DST_IMAGE=gloryhuis/dst-dedicated-server:VERSION ./build.sh
+docker push gloryhuis/dst-dedicated-server:VERSION
+```
+
 ```bash
 docker buildx build --platform linux/amd64 \
   -t ghcr.io/OWNER/dst-dedicated-server:VERSION \
