@@ -8,6 +8,19 @@ cluster_name="${CLUSTER_NAME:-DSTWhalesCluster}"
 install_dir="${DST_INSTALL_DIR:-$HOME/server_dst}"
 cluster_dir="$HOME/.klei/DoNotStarveTogether/$cluster_name"
 
+find_server_binary() {
+    local binary
+    for binary in \
+        "$install_dir/bin64/dontstarve_dedicated_server_nullrenderer_x64" \
+        "$install_dir/bin/dontstarve_dedicated_server_nullrenderer"; do
+        if [[ -x "$binary" ]]; then
+            printf '%s\n' "$binary"
+            return 0
+        fi
+    done
+    return 1
+}
+
 update_server() {
     local attempts="${STEAMCMD_UPDATE_ATTEMPTS:-3}"
     local attempt
@@ -35,16 +48,16 @@ update_server() {
     return 1
 }
 
-if [[ "${UPDATE_SERVER:-true}" == "true" ]]; then
-    # Update at startup so a newly released server build cannot remain stale.
+mkdir -p "$install_dir/mods"
+if ! find_server_binary >/dev/null; then
+    printf 'DST server is not installed; installing through SteamCMD...\n'
+    update_server
+elif [[ "${UPDATE_SERVER:-true}" == "true" ]]; then
+    printf 'Checking DST server updates through SteamCMD...\n'
     update_server
 fi
 
-server_binary="$install_dir/bin64/dontstarve_dedicated_server_nullrenderer_x64"
-if [[ ! -x "$server_binary" ]]; then
-    server_binary="$install_dir/bin/dontstarve_dedicated_server_nullrenderer"
-fi
-if [[ ! -x "$server_binary" ]]; then
+if ! server_binary="$(find_server_binary)"; then
     printf 'DST server binary not found in %s/bin64 or %s/bin\n' "$install_dir" "$install_dir" >&2
     exit 1
 fi

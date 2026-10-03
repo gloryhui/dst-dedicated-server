@@ -2,7 +2,7 @@
 
 Docker deployment for a current Linux Don't Starve Together dedicated server.
 
-The image installs Steam App `343050` with SteamCMD, prefers the current 64-bit server binary, and keeps the legacy 32-bit runtime as a fallback. The supported container platform is `linux/amd64`.
+The image contains SteamCMD, runtime libraries, and the startup script; game files are downloaded at container startup into persistent Docker volumes. Steam App `343050` supplies the dedicated server. The current 64-bit server binary is preferred, with the legacy 32-bit runtime kept as a fallback. The supported container platform is `linux/amd64`.
 
 ## Languages
 
@@ -38,7 +38,9 @@ docker compose ps
 docker compose logs -f
 ```
 
-The first build downloads the complete dedicated server and can take several minutes. Startup checks for updates through SteamCMD and retries transient update failures three times. Set `UPDATE_SERVER=false` on a service when an offline startup is required.
+The first container startup downloads the complete dedicated server and can take several minutes. Each subsequent container startup checks for updates through SteamCMD and retries transient failures up to three attempts. An update failure prevents the shard from starting. Updates are not checked while the game is running. Set `UPDATE_SERVER=false` to skip updates for an already installed server; an empty volume still requires an initial download.
+
+Master and Caves each use a separate named volume (`dst_master_server` and `dst_caves_server`) so simultaneous startup cannot update the same game files. These volumes survive container restarts, recreation, and `docker compose down`; `docker compose down -v` removes them and the next startup downloads the server again. Configuration, saves, and mods remain in the existing host bind mounts. No image rebuild is required for game updates. When migrating from an older image without game volumes, the first startup downloads a fresh installation into the new volumes.
 
 Stop the server with `c_shutdown()` from the Master console when possible so the world is saved. For a hard container stop:
 

@@ -4,7 +4,6 @@ LABEL maintainer="Caio Mathielo <mathielo@gmail.com>"
 LABEL description="Don't Starve Together dedicated server"
 LABEL source="https://github.com/mathielo/dst-dedicated-server"
 
-ARG DST_APP_ID=343050
 ENV DST_INSTALL_DIR=/home/dst/server_dst
 
 WORKDIR /home/dst
@@ -33,23 +32,9 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 USER dst
-RUN mkdir -p "$HOME/.klei/DoNotStarveTogether" "$DST_INSTALL_DIR/mods"; \
-    for attempt in 1 2 3; do \
-        if ./steamcmd.sh \
-            +@ShutdownOnFailedCommand 1 \
-            +@NoPromptForPassword 1 \
-            +force_install_dir "$DST_INSTALL_DIR" \
-            +login anonymous \
-            +app_update "$DST_APP_ID" validate \
-            +quit; then \
-            exit 0; \
-        fi; \
-        echo "SteamCMD update failed (attempt $attempt/3), retrying..." >&2; \
-        sleep $((attempt * 5)); \
-    done; \
-    exit 1
+RUN mkdir -p "$HOME/.klei/DoNotStarveTogether" "$DST_INSTALL_DIR/mods"
 
-VOLUME ["/home/dst/.klei/DoNotStarveTogether", "/home/dst/server_dst/mods"]
+VOLUME ["/home/dst/.klei/DoNotStarveTogether", "/home/dst/server_dst"]
 
 COPY --chown=dst:dst --chmod=755 start-container-server.sh /home/dst/start-container-server.sh
 ENTRYPOINT ["/home/dst/start-container-server.sh"]
